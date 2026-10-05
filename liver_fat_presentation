@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>The Prevalence of Hepatic Steatosis and Liver Fibrosis in Middle-Aged Black South African Men and Women</title>
+<meta name="description" content="Presentation: prevalence of hepatic steatosis and liver fibrosis in the Middle-Aged Soweto Cohort (MASC), with sex differences.">
+<meta name="theme-color" content="#2A1710">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Crect width=%2764%27 height=%2764%27 rx=%2714%27 fill=%27%23C1440E%27/%3E%3Cpath d=%27M10 34C8 22 17 14 29 14c8 0 13 3 16 7 4-2 9-1 12 2 2 2 3 5 2 7-5 7-12 11-20 14-4 2-7 7-14 7C16 51 11 44 10 34z%27 fill=%27%23fff%27/%3E%3C/svg%3E">
+<style>
+  :root{ --bg:#2A1710; --bar:#1F110B; --ink:#FBF4EC; --soft:#C9B8A8; --brand:#C1440E; --brand2:#E8792F; }
+  *{ box-sizing:border-box; }
+  html,body{ margin:0; height:100%; background:var(--bg); color:var(--ink); font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; }
+  body{ display:flex; flex-direction:column; height:100dvh; overflow:hidden; }
+
+  .stage{ flex:1 1 auto; min-height:0; display:flex; align-items:center; justify-content:center; padding:12px; position:relative; touch-action:pan-y; }
+  .frame{ position:relative; width:100%; height:100%; display:flex; align-items:center; justify-content:center; }
+  .slide{ max-width:100%; max-height:100%; width:auto; height:auto; border-radius:6px; box-shadow:0 18px 50px -18px rgba(0,0,0,.7); background:#FFF5E6; user-select:none; -webkit-user-drag:none; transition:opacity .18s ease; }
+  .slide.fading{ opacity:.0; }
+
+  .zone{ position:absolute; top:0; bottom:0; width:22%; border:0; background:transparent; cursor:pointer; z-index:2; -webkit-tap-highlight-color:transparent; }
+  .zone.left{ left:0; } .zone.right{ right:0; }
+
+  .bar{ flex:0 0 auto; background:var(--bar); display:flex; align-items:center; gap:10px; padding:10px 14px calc(10px + env(safe-area-inset-bottom)); border-top:1px solid rgba(255,255,255,.08); }
+  .bar .title{ flex:1 1 auto; min-width:0; font-size:.78rem; color:var(--soft); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .btn{ appearance:none; border:0; cursor:pointer; color:#fff; background:rgba(255,255,255,.1); height:40px; min-width:40px; padding:0 14px; border-radius:20px; font:600 .85rem system-ui,sans-serif; display:inline-flex; align-items:center; justify-content:center; gap:6px; text-decoration:none; }
+  .btn:hover{ background:rgba(255,255,255,.18); }
+  .btn.primary{ background:var(--brand); }
+  .btn.primary:hover{ background:var(--brand2); }
+  .btn[disabled]{ opacity:.35; cursor:default; }
+  .count{ font-variant-numeric:tabular-nums; font-size:.85rem; min-width:56px; text-align:center; color:var(--ink); }
+  .bar svg{ width:18px; height:18px; }
+  @media (max-width:560px){ .bar .title{ display:none; } .bar{ justify-content:center; } .hide-sm{ display:none; } }
+</style>
+</head>
+<body>
+  <main class="stage" id="stage">
+    <div class="frame">
+      <button class="zone left" id="zl" aria-label="Previous slide"></button>
+      <img class="slide" id="slide" alt="Slide 1 of 15" src="slides/slide-01.jpg" draggable="false">
+      <button class="zone right" id="zr" aria-label="Next slide"></button>
+    </div>
+  </main>
+
+  <nav class="bar" aria-label="Slide controls">
+    <div class="title">Hepatic steatosis and liver fibrosis in the Middle-Aged Soweto Cohort</div>
+    <button class="btn" id="prev" aria-label="Previous slide"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M15 5l-7 7 7 7"/></svg></button>
+    <span class="count" id="count">1 / 15</span>
+    <button class="btn primary" id="next" aria-label="Next slide"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M9 5l7 7-7 7"/></svg></button>
+    <button class="btn" id="fs" aria-label="Full screen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button>
+    <a class="btn hide-sm" href="Liver-Fat-Presentation.pdf" download>PDF</a>
+  </nav>
+
+<script>
+(function(){
+  var TOTAL = 15;
+  var img = document.getElementById('slide');
+  var count = document.getElementById('count');
+  var prev = document.getElementById('prev');
+  var next = document.getElementById('next');
+  var i = 1;
+
+  function src(n){ return 'slides/slide-' + (n < 10 ? '0' : '') + n + '.jpg'; }
+  function preload(n){ if(n >= 1 && n <= TOTAL){ var p = new Image(); p.src = src(n); } }
+
+  function show(n, push){
+    n = Math.max(1, Math.min(TOTAL, n));
+    if(n === i && img.getAttribute('src') === src(n)) return;
+    i = n;
+    img.classList.add('fading');
+    setTimeout(function(){
+      img.src = src(i);
+      img.alt = 'Slide ' + i + ' of ' + TOTAL;
+      img.onload = function(){ img.classList.remove('fading'); };
+      setTimeout(function(){ img.classList.remove('fading'); }, 400);
+    }, 120);
+    count.textContent = i + ' / ' + TOTAL;
+    prev.disabled = i === 1;
+    next.disabled = i === TOTAL;
+    preload(i + 1); preload(i - 1);
+    if(push !== false){ try{ history.replaceState(null, '', '#' + i); }catch(e){} }
+  }
+
+  function fromHash(){
+    var n = parseInt((location.hash || '').replace('#',''), 10);
+    return isNaN(n) ? 1 : n;
+  }
+
+  prev.addEventListener('click', function(){ show(i - 1); });
+  next.addEventListener('click', function(){ show(i + 1); });
+  document.getElementById('zl').addEventListener('click', function(){ show(i - 1); });
+  document.getElementById('zr').addEventListener('click', function(){ show(i + 1); });
+
+  document.addEventListener('keydown', function(e){
+    if(e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' '){ e.preventDefault(); show(i + 1); }
+    else if(e.key === 'ArrowLeft' || e.key === 'PageUp'){ e.preventDefault(); show(i - 1); }
+    else if(e.key === 'Home'){ show(1); }
+    else if(e.key === 'End'){ show(TOTAL); }
+    else if(e.key === 'f' || e.key === 'F'){ toggleFs(); }
+  });
+
+  var sx = null, sy = null;
+  var stage = document.getElementById('stage');
+  stage.addEventListener('touchstart', function(e){ sx = e.touches[0].clientX; sy = e.touches[0].clientY; }, {passive:true});
+  stage.addEventListener('touchend', function(e){
+    if(sx === null) return;
+    var dx = e.changedTouches[0].clientX - sx, dy = e.changedTouches[0].clientY - sy;
+    if(Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)){ show(dx < 0 ? i + 1 : i - 1); }
+    sx = sy = null;
+  }, {passive:true});
+
+  function toggleFs(){
+    var d = document, el = d.documentElement;
+    try{
+      if(!d.fullscreenElement){ (el.requestFullscreen || el.webkitRequestFullscreen || function(){}).call(el); }
+      else { (d.exitFullscreen || d.webkitExitFullscreen || function(){}).call(d); }
+    }catch(e){}
+  }
+  var fs = document.getElementById('fs');
+  fs.addEventListener('click', toggleFs);
+  if(!(document.documentElement.requestFullscreen || document.documentElement.webkitRequestFullscreen)){ fs.style.display = 'none'; }
+
+  window.addEventListener('hashchange', function(){ show(fromHash(), false); });
+
+  var start = fromHash();
+  i = 0;
+  show(start, false);
+  img.src = src(Math.max(1, Math.min(TOTAL, start)));
+  img.classList.remove('fading');
+})();
+</script>
+</body>
+</html>
+
+# Liver fat study presentation (BRIPS conference)
+
+The Prevalence of Hepatic Steatosis and Liver Fibrosis in Middle-Aged Black South African Men and Women (Middle-Aged Soweto Cohort).
+
+Open the site to flip through the slides. Use the arrow keys, the buttons, or swipe on a phone. The PDF button downloads the full presentation.
+
+Files: `index.html` (slide viewer), `slides/` (slide images), `Liver-Fat-Presentation.pdf` (full presentation).
+
+{
+  "cleanUrls": true,
+  "headers": [
+    {
+      "source": "/slides/(.*)",
+      "headers": [{ "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }]
+    }
+  ]
+}
